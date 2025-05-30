@@ -1,0 +1,67 @@
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #3f2b96, #a8c0ff);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.sidebar {
+  width: 290px;
+  min-width: 250px;
+  background-color: #ffffff;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+/* Main content takes the rest */
+.main-content {
+  flex: 1;
+  padding: 40px;
+  background-color: #f9f9f9;
+  border-radius: 20px 0 0 20px;
+  margin: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top bar styling */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-grid {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: unset;
+    height: auto;
+  }
+
+  .main-content {
+    margin: 0;
+    border-radius: 0;
+    padding: 20px;
+  }
+
+  .card-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+}

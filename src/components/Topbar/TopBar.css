@@ -1,0 +1,27 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+
+}
+.topbar .right {
+  display: flex;
+  gap: 10px;
+}
+.topbar input {
+  padding: 12px;
+  border-radius: 5px;
+  border: 1px solid #000000;
+  width: 300px;
+  background-color: #f9f9f9;
+  color: #000000;
+}
+.topbar button {
+  padding: 8px 12px;
+  background: linear-gradient(to right, rgb(74, 144, 226));
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

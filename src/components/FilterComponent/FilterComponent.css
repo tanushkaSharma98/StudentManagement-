@@ -1,0 +1,31 @@
+.filter-container {
+  display: flex;
+  gap: 100px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-item label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #007BFF;
+}
+
+.filter-item select,
+.filter-item input {
+  padding: 10px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  min-width: 180px;
+  font-size: 14px;
+  background-color: #ffffff;
+  color: black;
+}
+
+

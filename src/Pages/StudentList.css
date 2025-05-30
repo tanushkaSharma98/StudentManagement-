@@ -1,0 +1,21 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.student-list-page {
+  width: 100vw;
+  height: 100vh;
+  padding: 40px;
+  background-color: #f0f4f8;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.student-list-page h2 {
+  /* text-align: center; */
+  color: #0155af;
+  margin-bottom: 30px;
+  font-size: 50px;
+}
