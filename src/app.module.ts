@@ -2,7 +2,10 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './auth/user.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { AuthModule } from './auth/auth.module'; 
+import { StudentModule } from './student/student.module';
 
 @Module({
   imports: [
@@ -16,7 +19,18 @@ import { UserModule } from './auth/user.module';
       autoLoadModels: true,
       synchronize: true,
     }),
-    UserModule,
+    AuthModule, 
+  
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
+    }),
+
+     ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
+    }),
+
+     StudentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
