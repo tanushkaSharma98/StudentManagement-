@@ -1,19 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend,
 } from 'recharts';
 import './StatsChart.css';
-
-const data = [
-  {
-    name: 'Overview',
-    Students: 30,
-    Branches: 12,
-    Semesters: 8,
-  }
-];
+import axios from 'axios';
 
 const StatsChart = () => {
+  const [studentCount, setStudentCount] = useState(0);
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:3000/students', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setStudentCount(response.data.length);
+      } catch (error) {
+        console.error('Error fetching student data:', error);
+      }
+    };
+
+    fetchStudents();
+  }, []);
+
+  const data = [
+    {
+      name: 'Overview',
+      Students: studentCount,
+      Branches: 12,
+      Semesters: 8,
+    }
+  ];
+
   return (
     <div className="chart-container">
       <h2>Statistics Overview</h2>

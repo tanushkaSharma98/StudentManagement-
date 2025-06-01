@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './AddStudent.css';
 
 const AddStudent = ({ onClose, onSubmit }) => {
@@ -20,10 +21,33 @@ const AddStudent = ({ onClose, onSubmit }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
-    onClose();
+
+    const data = new FormData();
+    data.append('name', formData.name);
+    data.append('email', formData.email);
+    data.append('dob', formData.dob);
+    data.append('branch', formData.branch);
+    data.append('semester', formData.semester);
+    data.append('photo', formData.photo);
+
+    const token = localStorage.getItem('token'); 
+
+    try {
+      const response = await axios.post('http://localhost:3000/students/create', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`, 
+        },
+      });
+
+      onSubmit(response.data);
+      onClose();
+    } catch (error) {
+      console.error('Error adding student:', error);
+      alert('Failed to add student. Please try again.');
+    }
   };
 
   return (
