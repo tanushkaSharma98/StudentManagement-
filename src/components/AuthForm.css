@@ -19,8 +19,8 @@
 .auth-form button {
   padding: 12px;
   font-size: 1rem;
-  background-color: #4caf50;
-  color: white;
+  background-color: #7daee3; 
+  color: #111; 
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -28,7 +28,8 @@
 }
 
 .auth-form button:hover {
-  background-color: #388e3c;
+  background-color: #5a96d1; 
+  color: #fff; 
 }
 
 .toggle-link {
