@@ -19,18 +19,12 @@ import { StudentModule } from './student/student.module';
       autoLoadModels: true,
       synchronize: true,
     }),
-    AuthModule, 
-  
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'client'),
-    }),
-
-     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),
       serveRoot: '/uploads',
     }),
-
-     StudentModule,
+    AuthModule,
+    StudentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

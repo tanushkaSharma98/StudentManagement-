@@ -29,5 +29,5 @@ export class Student extends Model {
   semester: number;
 
   @Column({ type: DataType.TEXT })
-  photo: string; // Will store file path like '/uploads/filename.jpg'
+  photo: string; 
 }

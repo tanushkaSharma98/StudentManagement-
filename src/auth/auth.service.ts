@@ -9,7 +9,10 @@ export class AuthService {
 
   async signup(dto) {
     const hash = await bcrypt.hash(dto.password, 10); // hashing plain password
-    const user = await User.create({ ...dto, password: hash }); // save hashed password
+
+ const role = dto.role || 'admin';
+
+    const user = await User.create({ ...dto, password: hash, role }); // save hashed password and default role
     return user;
   }
 
