@@ -6,7 +6,7 @@ import * as path from 'path';
 
 @Injectable()
 export class StudentService {
-  constructor(@InjectModel(Student) private studentModel: typeof Student) {}
+  constructor(@InjectModel(Student) private studentModel: typeof Student) {} //access db
 
   async createStudent(data: any, file: Express.Multer.File) {
     const photoPath = file ? `/uploads/${file.filename}` : null;

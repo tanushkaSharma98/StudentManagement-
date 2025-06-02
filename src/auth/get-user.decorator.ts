@@ -6,3 +6,4 @@ export const GetUser = createParamDecorator(
     return request.user;  
   },
 );
+//helps to get the user data easily 
