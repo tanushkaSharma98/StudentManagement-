@@ -10,7 +10,7 @@ const TopBar = ({ onAddStudent }) => {
       </div>
       <div className="right">
         {/* <input type="text" placeholder="Search..." /> */}
-        <button onClick={onAddStudent}>Add Student</button>
+        <button onClick={onAddStudent}>Add Student +</button>
       </div>
     </div>
   );

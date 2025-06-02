@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+ import React, { useEffect, useRef, useState } from 'react';
 import './StudentProfilePopup.css';
 import axios from 'axios';
 
@@ -114,9 +114,20 @@ const StudentProfilePopup = ({ student, onClose }) => {
     }
   };
 
+  const renderInput = (type, name, value) => (
+    <input
+      type={type}
+      name={name}
+      value={value}
+      onChange={handleChange}
+      className="custom-input"
+    />
+  );
+
   return (
     <div className="popup-overlay">
       <div className="popup-container">
+         
         <div className="popup-left">
           <img
             src={
@@ -140,74 +151,34 @@ const StudentProfilePopup = ({ student, onClose }) => {
             />
           )}
           <h2 className="student-name">
-            {editable ? (
-              <input
-                type="text"
-                name="name"
-                value={updatedStudent.name}
-                onChange={handleChange}
-                className="editable-input"
-              />
-            ) : (
-              updatedStudent.name
-            )}
+            {editable ? renderInput('text', 'name', updatedStudent.name) : updatedStudent.name}
           </h2>
           <p className="student-role">
-            {editable ? (
-              <input
-                type="text"
-                name="branch"
-                value={updatedStudent.branch}
-                onChange={handleChange}
-                className="editable-input"
-              />
-            ) : (
-              updatedStudent.branch
-            )}
+            {editable ? renderInput('text', 'branch', updatedStudent.branch) : updatedStudent.branch}
           </p>
         </div>
 
         <div className="popup-right">
+          <button className="close-button" onClick={onClose}>×</button>
           <h3>Student Information</h3>
 
           <div className="info-row">
             <span className="label">Email:</span>
-            {editable ? (
-              <input
-                type="email"
-                name="email"
-                value={updatedStudent.email}
-                onChange={handleChange}
-              />
-            ) : (
+            {editable ? renderInput('email', 'email', updatedStudent.email) : (
               <span>{updatedStudent.email}</span>
             )}
           </div>
 
           <div className="info-row">
             <span className="label">DOB:</span>
-            {editable ? (
-              <input
-                type="date"
-                name="dob"
-                value={updatedStudent.dob?.slice(0, 10)}
-                onChange={handleChange}
-              />
-            ) : (
+            {editable ? renderInput('date', 'dob', updatedStudent.dob?.slice(0, 10)) : (
               <span>{updatedStudent.dob?.slice(0, 10)}</span>
             )}
           </div>
 
           <div className="info-row">
             <span className="label">Semester:</span>
-            {editable ? (
-              <input
-                type="number"
-                name="semester"
-                value={updatedStudent.semester}
-                onChange={handleChange}
-              />
-            ) : (
+            {editable ? renderInput('number', 'semester', updatedStudent.semester) : (
               <span>{updatedStudent.semester}</span>
             )}
           </div>
@@ -217,11 +188,8 @@ const StudentProfilePopup = ({ student, onClose }) => {
               {editable ? 'Save' : 'Update'}
             </button>
             <button onClick={handleDelete} className="delete-btn">
-              Delete 
+              Delete
             </button>
-            {/* <button onClick={onClose} className="close-btn">
-              Close
-            </button> */}
           </div>
         </div>
       </div>
@@ -230,3 +198,4 @@ const StudentProfilePopup = ({ student, onClose }) => {
 };
 
 export default StudentProfilePopup;
+

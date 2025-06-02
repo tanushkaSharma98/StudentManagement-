@@ -1,7 +1,7 @@
 import React from 'react';
 import './List.css';
 
-const List = ({ students, onStudentClick }) => {
+const List = ({ students, onStudentClick, startIndex = 0 }) => {
   return (
     <div className="list-container">
       <table className="student-table">
@@ -18,7 +18,7 @@ const List = ({ students, onStudentClick }) => {
         <tbody>
           {students.map((student, index) => (
             <tr key={index} onClick={() => onStudentClick(student)} className="clickable-row">
-              <td>{index + 1}</td>
+              <td>{startIndex + index + 1}</td>
               <td>{student.name}</td>
               <td>{student.email}</td>
               <td>{student.dob}</td>

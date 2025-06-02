@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; 
+import { FaArrowLeft } from 'react-icons/fa';   
 import './StudentList.css';
+
 import List from '../components/List/List';
 import FilterComponent from '../components/FilterComponent/FilterComponent';
 import StudentProfilePopup from '../components/StudentProfilePopup/StudentProfilePopup';
 import axios from 'axios';
 
 const StudentList = () => {
+  const navigate = useNavigate(); 
+
   const [students, setStudents] = useState([]);
   const [semesterFilter, setSemesterFilter] = useState('');
   const [branchSearch, setBranchSearch] = useState('');
   const [nameSearch, setNameSearch] = useState('');
   const [selectedStudent, setSelectedStudent] = useState(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const studentsPerPage = 5;
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -37,9 +45,32 @@ const StudentList = () => {
     return matchesSemester && matchesBranch && matchesName;
   });
 
+  const indexOfLastStudent = currentPage * studentsPerPage;
+  const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+  const currentStudents = filteredStudents.slice(indexOfFirstStudent, indexOfLastStudent);
+  const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(prev => prev + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prev => prev - 1);
+    }
+  };
+
   return (
     <div className="student-list-page">
+      
+      <div className="back-button" onClick={() => navigate('/dashboard')}>
+        <FaArrowLeft className="back-icon" /> Back to Dashboard
+      </div>
+
       <h2>Student List</h2>
+
       <FilterComponent 
         semester={semesterFilter}
         branchSearch={branchSearch}
@@ -48,7 +79,19 @@ const StudentList = () => {
         onBranchSearchChange={setBranchSearch}
         onNameSearchChange={setNameSearch}
       />
-      <List students={filteredStudents} onStudentClick={setSelectedStudent} />
+
+      <List 
+        students={currentStudents} 
+        onStudentClick={setSelectedStudent} 
+        startIndex={indexOfFirstStudent} 
+      />
+
+      <div className="pagination-controls">
+        <button onClick={handlePrev} disabled={currentPage === 1}>Previous</button>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button onClick={handleNext} disabled={currentPage === totalPages}>Next</button>
+      </div>
+
       {selectedStudent && (
         <StudentProfilePopup
           student={selectedStudent}

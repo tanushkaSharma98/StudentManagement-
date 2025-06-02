@@ -4,11 +4,13 @@ import LandingPage from './pages/LandingPage';
 import DashboardPage from './pages/DashboardPage';
 import StudentList from './pages/StudentList'; 
 
+
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        {/* <Route path="/Home" element={<HomePage />} /> */}
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/students" element={<StudentList />} /> 
       </Routes>
