@@ -17,7 +17,7 @@
   height: 100%;
 }
 
-/* Main content takes the rest */
+
 .main-content {
   flex: 1;
   padding: 40px;
@@ -29,7 +29,7 @@
   flex-direction: column;
 }
 
-/* Top bar styling */
+
 .topbar {
   display: flex;
   justify-content: space-between;
