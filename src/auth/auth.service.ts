@@ -2,13 +2,27 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from './user.model';
 import * as bcrypt from 'bcryptjs';
+import { LoginDto } from './dto/login.dto';
+
+interface userDTO{
+  password : string, 
+  role: string
+}
+
+interface LogDto{
+  email: string,
+  password: string
+}
 
 @Injectable()
 export class AuthService {
   constructor(private jwtService: JwtService) {}
 
-  async signup(dto) {
-    const hash = await bcrypt.hash(dto.password, 10); // hashing plain password
+
+
+  async signup(dto : userDTO) {
+    const hash = await bcrypt.hash(dto.password, 10);
+    // hashing plain password
 
  const role = dto.role || 'admin';
 
@@ -16,7 +30,7 @@ export class AuthService {
     return user;
   }
 
-  async login(dto) {
+  async login(dto: LogDto) {
     // email of user to find 
     const user = await User.findOne({ where: { email: dto.email } });
 

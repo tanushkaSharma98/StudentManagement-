@@ -18,7 +18,7 @@ export class User extends Model {
   @Column({ type: DataType.STRING, allowNull: false })
   declare password: string;
 
-  @Column({ type: DataType.STRING, allowNull: false })
+  @Column({ type: DataType.STRING, allowNull: false ,})
   declare role: string;
 
   @CreatedAt
