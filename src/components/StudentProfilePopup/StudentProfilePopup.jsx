@@ -1,4 +1,4 @@
- import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './StudentProfilePopup.css';
 import axios from 'axios';
 
@@ -7,6 +7,8 @@ const StudentProfilePopup = ({ student, onClose }) => {
   const [updatedStudent, setUpdatedStudent] = useState({ ...student });
   const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [selectedImageFile, setSelectedImageFile] = useState(null);
+  const [message, setMessage] = useState({ type: '', text: '' });
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const fileInputRef = useRef(null);
 
   if (!student) return null;
@@ -86,19 +88,16 @@ const StudentProfilePopup = ({ student, onClose }) => {
             },
           }
         );
-        alert('Student updated successfully!');
+        setMessage({ type: 'success', text: 'Student updated successfully!' });
       } catch (error) {
         console.error('Error updating student:', error);
-        alert('Failed to update student.');
+        setMessage({ type: 'error', text: 'Failed to update student.' });
       }
     }
     setEditable(!editable);
   };
 
-  const handleDelete = async () => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this student?");
-    if (!confirmDelete) return;
-
+  const handleDeleteConfirm = async () => {
     try {
       const token = localStorage.getItem('token');
       await axios.delete(`http://localhost:3000/students/${student.student_id}`, {
@@ -106,11 +105,13 @@ const StudentProfilePopup = ({ student, onClose }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      alert('Student deleted successfully!');
-      onClose();
+      setMessage({ type: 'success', text: 'Student deleted successfully!' });
+      setTimeout(() => {
+        onClose();
+      }, 1000);
     } catch (error) {
       console.error('Error deleting student:', error);
-      alert('Failed to delete student.');
+      setMessage({ type: 'error', text: 'Failed to delete student.' });
     }
   };
 
@@ -127,7 +128,6 @@ const StudentProfilePopup = ({ student, onClose }) => {
   return (
     <div className="popup-overlay">
       <div className="popup-container">
-         
         <div className="popup-left">
           <img
             src={
@@ -184,13 +184,33 @@ const StudentProfilePopup = ({ student, onClose }) => {
           </div>
 
           <div className="popup-actions">
-            <button onClick={handleUpdateClick}>
-              {editable ? 'Save' : 'Update'}
-            </button>
-            <button onClick={handleDelete} className="delete-btn">
-              Delete
-            </button>
+            
+            {!showConfirmDelete && (
+              <button onClick={handleUpdateClick}>
+                {editable ? 'Save' : 'Update'}
+              </button>
+            )}
+
+            {!showConfirmDelete ? (
+              <button onClick={() => setShowConfirmDelete(true)} className="delete-btn">
+                Delete
+              </button>
+            ) : (
+              <div className="confirm-delete">
+                <span className="confirm-text">Are you sure?</span>
+                <div className="confirm-buttons">
+                  <button className="confirm yes" onClick={handleDeleteConfirm}>Yes</button>
+                  <button className="confirm no" onClick={() => setShowConfirmDelete(false)}>No</button>
+                </div>
+              </div>
+            )}
           </div>
+
+          {message.text && (
+            <div className={`message ${message.type}`}>
+              {message.text}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -198,4 +218,3 @@ const StudentProfilePopup = ({ student, onClose }) => {
 };
 
 export default StudentProfilePopup;
-

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import './AddStudent.css';
 
 const AddStudent = ({ onClose, onSubmit }) => {
-  const { register, handleSubmit, watch, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm();
+  const [statusMessage, setStatusMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const onFormSubmit = async (formData) => {
     const data = new FormData();
@@ -13,7 +15,7 @@ const AddStudent = ({ onClose, onSubmit }) => {
     data.append('dob', formData.dob);
     data.append('branch', formData.branch);
     data.append('semester', formData.semester);
-    data.append('photo', formData.photo[0]); 
+    data.append('photo', formData.photo[0]);
 
     const token = localStorage.getItem('token');
 
@@ -25,20 +27,33 @@ const AddStudent = ({ onClose, onSubmit }) => {
         },
       });
 
-       alert('✅ Student added successfully!');
-    onSubmit(response.data);
-    onClose();
-    reset();
-  } catch (error) {
-    console.error('Error adding student:', error);
-    alert('❌ Failed to add student. Please try again.');
-  }
+      setIsSuccess(true);
+      setStatusMessage('Student added successfully!');
+      onSubmit(response.data);
+      reset();
+
+      setTimeout(() => {
+        setStatusMessage('');
+        onClose();
+      }, 2000);
+    } catch (error) {
+      console.error('Error adding student:', error);
+      setIsSuccess(false);
+      setStatusMessage('Failed to add student. Please try again.');
+    }
   };
 
   return (
     <div className="add-student-overlay">
       <div className="add-student-popup">
         <h2>Add New Student</h2>
+
+        {statusMessage && (
+          <div className={`status-message ${isSuccess ? 'success' : 'error'}`}>
+            {statusMessage}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit(onFormSubmit)} className="add-student-form">
           <label>
             Name:

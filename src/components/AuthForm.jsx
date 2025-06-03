@@ -4,14 +4,20 @@ import { useNavigate } from "react-router-dom";
 import "./AuthForm.css";
 
 const AuthForm = ({ type, toggleForm }) => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState(""); 
+  const [name, setName] = useState("");
+
+  const [message, setMessage] = useState({ type: "", text: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage({ type: "", text: "" });
+    setIsSubmitting(true);
+
     try {
       if (type === "login") {
         const response = await axios.post("http://localhost:3000/auth/login", {
@@ -19,22 +25,30 @@ const AuthForm = ({ type, toggleForm }) => {
           password,
         });
         const token = response.data.token;
-        localStorage.setItem("token", token); 
-        navigate("/dashboard"); 
+        localStorage.setItem("token", token);
+        setMessage({ type: "success", text: "Login successful!" });
+
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1000);
       } else {
-        
         await axios.post("http://localhost:3000/auth/signup", {
           name,
           email,
           password,
-          
         });
-        alert("Signup successful! Please login.");
-        toggleForm();
+        setMessage({ type: "success", text: "Signup successful! Please login." });
+
+        setTimeout(() => {
+          toggleForm();
+          setMessage({ type: "", text: "" });
+        }, 1500);
       }
     } catch (error) {
       console.error("Auth Error:", error);
-      alert("Authentication failed.");
+      setMessage({ type: "error", text: "Authentication failed. Please try again." });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -49,6 +63,7 @@ const AuthForm = ({ type, toggleForm }) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+          disabled={isSubmitting}
         />
       )}
 
@@ -58,6 +73,7 @@ const AuthForm = ({ type, toggleForm }) => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
+        disabled={isSubmitting}
       />
       <input
         type="password"
@@ -65,11 +81,24 @@ const AuthForm = ({ type, toggleForm }) => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         required
+        disabled={isSubmitting}
       />
 
-      <button type="submit">{type === "login" ? "Login" : "Sign Up"}</button>
+      <button type="submit" disabled={isSubmitting}>
+        {type === "login" ? "Login" : "Sign Up"}
+      </button>
 
-      <p onClick={toggleForm} className="toggle-link">
+      {message.text && (
+        <div className={`auth-message ${message.type}`} role="alert">
+          {message.text}
+        </div>
+      )}
+
+      <p
+        onClick={toggleForm}
+        className="toggle-link"
+        style={{ cursor: "pointer", userSelect: "none", marginTop: "15px" }}
+      >
         {type === "login" ? "Not registered? Sign up" : "Already a user? Login"}
       </p>
     </form>
