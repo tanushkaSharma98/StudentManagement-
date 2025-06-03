@@ -3,6 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from './user.model';
 import * as bcrypt from 'bcryptjs';
 import { LoginDto } from './dto/login.dto';
+import { SignupDto } from './dto/signup.dto';
+
 
 interface userDTO{
   password : string, 

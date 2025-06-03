@@ -3,13 +3,13 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Student } from './student.model';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Op } from 'sequelize';  
+import { Op, WhereOptions } from 'sequelize';
 
 @Injectable()
 export class StudentService {
   constructor(@InjectModel(Student) private studentModel: typeof Student) {}
 
-  async createStudent(data: any, file: Express.Multer.File) {
+  async createStudent(data: Partial<Student>, file: Express.Multer.File) {
     const photoPath = file ? `/uploads/${file.filename}` : null;
     return await this.studentModel.create({ ...data, photo: photoPath });
   }
@@ -22,7 +22,7 @@ export class StudentService {
     return await this.studentModel.findOne({ where: { student_id: id } });
   }
 
-  async updateStudent(id: number, data: any, file: Express.Multer.File) {
+  async updateStudent(id: number, data: Partial<Student>, file: Express.Multer.File) {
     const student = await this.studentModel.findByPk(id);
     if (!student) {
       throw new NotFoundException('Student not found');
@@ -67,7 +67,7 @@ export class StudentService {
   ) {
     const offset = (page - 1) * limit;
 
-    const where: any = {};
+    const where: WhereOptions<Student> = {};
     if (name) where.name = name;
     if (branch) where.branch = branch;
 
@@ -85,12 +85,11 @@ export class StudentService {
     };
   }
 
-  
   async filterStudents(name?: string, branch?: string) {
-    const where: any = {};
+    const where: WhereOptions<Student> = {};
 
     if (name) {
-      where.name = { [Op.iLike]: `%${name}%` }; 
+      where.name = { [Op.iLike]: `%${name}%` };
     }
 
     if (branch) {

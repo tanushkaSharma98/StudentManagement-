@@ -15,9 +15,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { StudentService } from './student.service';
-
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { GetUser } from '../auth/get-user.decorator';
+import { JwtPayload } from '../auth/types/jwt-payload.interface';
+import { CreateStudentDto } from './dto/create-student.dto';
+import { UpdateStudentDto } from './dto/update-student.dto';
 
 @Controller('students')
 @UseGuards(JwtAuthGuard)
@@ -38,39 +40,40 @@ export class StudentController {
   )
   createStudent(
     @UploadedFile() file: Express.Multer.File,
-    @Body() body: any,
-    @GetUser() user: any,
+    @Body() body: CreateStudentDto,
+    @GetUser() user: JwtPayload,
   ) {
     return this.studentService.createStudent(body, file);
   }
 
   @Get()
-  getAllStudents(@GetUser() user: any) {
+  getAllStudents(@GetUser() user: JwtPayload) {
     return this.studentService.getAllStudents();
   }
 
   @Get('paginated')
   getPaginatedStudents(
+    @GetUser() user: JwtPayload,
     @Query('page') page = '1',
-    @GetUser() user: any,
+    @Query('name') name?: string,
+    @Query('branch') branch?: string,
   ) {
     const pageNumber = Number(page) || 1;
-    const limit = 5; 
-    return this.studentService.getStudentsWithPagination(pageNumber, limit);
+    const limit = 5;
+    return this.studentService.getStudentsWithPagination(pageNumber, limit, name, branch);
   }
 
-  
   @Get('filter')
   filterStudents(
-    @Query('name') name: string,
-    @Query('branch') branch: string,
-    @GetUser() user: any,
+    @GetUser() user: JwtPayload,
+    @Query('name') name?: string,
+    @Query('branch') branch?: string,
   ) {
     return this.studentService.filterStudents(name, branch);
   }
 
   @Get(':id')
-  getStudentById(@Param('id') id: number, @GetUser() user: any) {
+  getStudentById(@GetUser() user: JwtPayload, @Param('id') id: number) {
     return this.studentService.getStudentById(id);
   }
 
@@ -87,16 +90,16 @@ export class StudentController {
     }),
   )
   updateStudent(
+    @GetUser() user: JwtPayload,
     @Param('id') id: number,
     @UploadedFile() file: Express.Multer.File,
-    @Body() body: any,
-    @GetUser() user: any,
+    @Body() body: UpdateStudentDto,
   ) {
     return this.studentService.updateStudent(id, body, file);
   }
 
   @Delete(':id')
-  deleteStudent(@Param('id') id: number) {
+  deleteStudent(@GetUser() user: JwtPayload, @Param('id') id: number) {
     return this.studentService.deleteStudent(id);
   }
 }
