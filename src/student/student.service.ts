@@ -68,8 +68,12 @@ export class StudentService {
     const offset = (page - 1) * limit;
 
     const where: WhereOptions<Student> = {};
-    if (name) where.name = name;
+    if (name) {
+  where.name = { [Op.iLike]: `%${name}%` }; // PostgreSQL only
+}
     if (branch) where.branch = branch;
+    
+    
 
     const { count, rows } = await this.studentModel.findAndCountAll({
       where,
@@ -85,18 +89,18 @@ export class StudentService {
     };
   }
 
-  async filterStudents(name?: string, branch?: string) {
-    const where: WhereOptions<Student> = {};
+  // async filterStudents(name?: string, branch?: string) {
+  //   const where: WhereOptions<Student> = {};
 
-    if (name) {
-      where.name = { [Op.iLike]: `%${name}%` };
-    }
+  //   if (name) {
+  //     where.name = { [Op.iLike]: `%${name}%` };
+  //   }
 
-    if (branch) {
-      where.branch = { [Op.iLike]: `%${branch}%` };
-    }
+  //   if (branch) {
+  //     where.branch = { [Op.iLike]: `%${branch}%` };
+  //   }
 
-    const students = await this.studentModel.findAll({ where });
-    return students;
-  }
+  //   const students = await this.studentModel.findAll({ where });
+  //   return students;
+  // }
 }

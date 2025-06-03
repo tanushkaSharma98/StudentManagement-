@@ -32,7 +32,7 @@ export class StudentController {
       storage: diskStorage({
         destination: './uploads',
         filename: (req, file, callback) => {
-          const uniqueName = Date.now() + extname(file.originalname);
+          const uniqueName = Date.now() + extname(file.originalname); //createu nique name
           callback(null, uniqueName);
         },
       }),
@@ -41,7 +41,7 @@ export class StudentController {
   createStudent(
     @UploadedFile() file: Express.Multer.File,
     @Body() body: CreateStudentDto,
-    @GetUser() user: JwtPayload,
+    // @GetUser() user: JwtPayload,
   ) {
     return this.studentService.createStudent(body, file);
   }
@@ -63,14 +63,14 @@ export class StudentController {
     return this.studentService.getStudentsWithPagination(pageNumber, limit, name, branch);
   }
 
-  @Get('filter')
-  filterStudents(
-    @GetUser() user: JwtPayload,
-    @Query('name') name?: string,
-    @Query('branch') branch?: string,
-  ) {
-    return this.studentService.filterStudents(name, branch);
-  }
+  // @Get('filter')
+  // filterStudents(
+  //   @GetUser() user: JwtPayload,
+  //   @Query('name') name?: string,
+  //   @Query('branch') branch?: string,
+  // ) {
+  //   return this.studentService.filterStudents(name, branch);
+  // }
 
   @Get(':id')
   getStudentById(@GetUser() user: JwtPayload, @Param('id') id: number) {
