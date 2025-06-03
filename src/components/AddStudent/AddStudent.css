@@ -97,3 +97,17 @@
   color: #721c24;
   border: 1px solid #f5c6cb;
 }
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+
+.error-msg {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 2px;
+  display: block;
+}

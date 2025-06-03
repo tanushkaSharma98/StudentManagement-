@@ -4,12 +4,17 @@ import axios from 'axios';
 import './AddStudent.css';
 
 const AddStudent = ({ onClose, onSubmit }) => {
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  
   const [statusMessage, setStatusMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
 
   const onFormSubmit = async (formData) => {
-    console.warn('formdata',formData)
     const data = new FormData();
     data.append('name', formData.name);
     data.append('email', formData.email);
@@ -58,28 +63,51 @@ const AddStudent = ({ onClose, onSubmit }) => {
         <form onSubmit={handleSubmit(onFormSubmit)} className="add-student-form">
           <label>
             Name:
-            <input type="text" {...register('name', { required: true })} />
+            <input type="text" {...register('name', { required: 'Name is required' })} />
+            {errors.name && <span className="error-msg">{errors.name.message}</span>}
           </label>
+          
           <label>
             Email:
-            <input type="email" {...register('email', { required: true })} />
+            <input type="email" {...register('email', { required: 'Email is required' })} />
+            {errors.email && <span className="error-msg">{errors.email.message}</span>}
           </label>
+          
           <label>
             Date of Birth:
-            <input type="date" {...register('dob', { required: true })} />
+            <input type="date" {...register('dob', { required: 'Date of Birth is required' })} />
+            {errors.dob && <span className="error-msg">{errors.dob.message}</span>}
           </label>
+          
           <label>
             Branch:
-            <input type="text" {...register('branch', { required: true })} />
+            <input type="text" {...register('branch', { required: 'Branch is required' })} />
+            {errors.branch && <span className="error-msg">{errors.branch.message}</span>}
           </label>
+          
           <label>
             Semester:
-            <input type="number" min="1" max="8" {...register('semester', { required: true })} />
+            <input
+              type="number"
+              min="1"
+              max="8"
+              {...register('semester', { required: 'Semester is required' })}
+            />
+            {errors.semester && <span className="error-msg">{errors.semester.message}</span>}
           </label>
+          
           <label>
             Photo:
-            <input type="file" accept="image/*" {...register('photo', { required: true })} />
+            <input
+              type="file"
+              accept="image/*"
+              {...register('photo', {
+                required: 'Please upload a photo',
+              })}
+            />
+            {errors.photo && <span className="error-msg">{errors.photo.message}</span>}
           </label>
+
           <div className="popup-buttons">
             <button type="submit" className="submit-btn">Add Student</button>
             <button type="button" className="cancel-btn" onClick={onClose}>Cancel</button>
