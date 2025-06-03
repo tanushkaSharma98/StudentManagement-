@@ -22,7 +22,7 @@ const DashboardPage = () => {
         <TopBar onAddStudent={() => setShowAddPopup(true)} />
 
         <div className="card-grid">
-          <StatCard title="Total Students" value="30" color="#4A90E2" showArrow={true} />
+          <StatCard title="Total Students" value="N/A" color="#4A90E2" showArrow={true} />
           <StatCard title="Branches" value="12"  color="#7B61FF" />
           <StatCard title="Semesters" value="8"  color="#F5A623" />
         </div>

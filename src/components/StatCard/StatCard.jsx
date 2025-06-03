@@ -19,6 +19,8 @@ const StatCard = ({ title, value: initialValue, icon, color, showArrow }) => {
           });
           setStudentCount(response.data.length); 
         } catch (error) {
+          // setStudentCount('N/A')
+
           console.error('Error fetching students:', error);
         }
       }

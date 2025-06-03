@@ -9,6 +9,7 @@ const AddStudent = ({ onClose, onSubmit }) => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const onFormSubmit = async (formData) => {
+    console.warn('formdata',formData)
     const data = new FormData();
     data.append('name', formData.name);
     data.append('email', formData.email);

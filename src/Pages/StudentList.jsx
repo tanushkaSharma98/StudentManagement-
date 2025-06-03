@@ -8,7 +8,6 @@ import FilterComponent from '../components/FilterComponent/FilterComponent';
 import StudentProfilePopup from '../components/StudentProfilePopup/StudentProfilePopup';
 import axios from 'axios';
 
-
 function debounce(fn, delay) {
   let timer;
   return (...args) => {
@@ -27,38 +26,31 @@ const StudentList = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const studentsPerPage = 5;
 
-  
   const fetchStudents = async (page = 1, branch = branchSearch, name = nameSearch) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3000/students/filter', {
+      const response = await axios.get('http://localhost:3000/students/paginated', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         params: {
+          page,
           name,
           branch,
         },
       });
 
-      const allFilteredStudents = response.data;
-
-      
-      const totalFiltered = allFilteredStudents.length;
-      const startIndex = (page - 1) * studentsPerPage;
-      const paginatedStudents = allFilteredStudents.slice(startIndex, startIndex + studentsPerPage);
+      const { students: paginatedStudents, totalPages, currentPage } = response.data;
 
       setStudents(paginatedStudents);
-      setTotalPages(Math.ceil(totalFiltered / studentsPerPage));
-      setCurrentPage(page);
+      setTotalPages(totalPages);
+      setCurrentPage(currentPage);
     } catch (error) {
-      console.error('Error fetching filtered students:', error);
+      console.error('Error fetching students:', error);
     }
   };
 
-  
   const debouncedFetchStudents = useCallback(
     debounce((page, branch, name) => {
       fetchStudents(page, branch, name);
@@ -66,12 +58,10 @@ const StudentList = () => {
     []
   );
 
-  
   useEffect(() => {
     fetchStudents(1);
   }, []);
 
-  
   useEffect(() => {
     debouncedFetchStudents(1, branchSearch, nameSearch);
   }, [branchSearch, nameSearch, debouncedFetchStudents]);
@@ -106,7 +96,7 @@ const StudentList = () => {
       <List
         students={students}
         onStudentClick={setSelectedStudent}
-        startIndex={(currentPage - 1) * studentsPerPage}
+        startIndex={(currentPage - 1) * students.length}
       />
 
       <div className="pagination-controls">
